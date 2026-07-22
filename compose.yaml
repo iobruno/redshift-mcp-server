@@ -1,0 +1,20 @@
+services:
+  redshift-mcp-server:
+    build: .
+    image: redshift-mcp-server:latest
+    container_name: redshift-mcp-server
+    environment:
+      AWS_PROFILE: ${AWS_PROFILE:-cp-dev}
+      AWS_REGION: ${AWS_REGION:-us-west-2}
+      FASTMCP_LOG_LEVEL: ${FASTMCP_LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      retries: 3
+    restart: unless-stopped
