@@ -30,4 +30,4 @@ EXPOSE 8000
 # expand at container start -- `exec` in front makes uvicorn replace the shell
 # as PID 1, so it still receives SIGTERM directly on `docker stop`/ECS task
 # stop instead of the shell swallowing it.
-ENTRYPOINT exec uvicorn mcpserver.server_http:app --host 0.0.0.0 --port "${REDSHIFT_MCP_PORT:-8000}" --workers "${REDSHIFT_MCP_WORKERS:-4}" --loop uvloop
+ENTRYPOINT exec uvicorn mcpserver.http_entrypoint:app --host 0.0.0.0 --port "${REDSHIFT_MCP_PORT:-8000}" --workers "${REDSHIFT_MCP_WORKERS:-4}" --loop uvloop
