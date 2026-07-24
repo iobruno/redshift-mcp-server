@@ -16,26 +16,34 @@ behind a single shared lock.
 
 from awslabs.redshift_mcp_server.server import mcp
 from mcp.server.transport_security import TransportSecuritySettings
+from starlette.applications import Starlette
 
 from mcpserver import healthcheck
 
-mcp.settings.stateless_http = True
-"""No Mcp-Session-Id to pin, so multiple workers/replicas can sit behind a
-load balancer with no sticky sessions required.
 
-Set before `app` is built below -- streamable_http_app() reads these lazily
-on first call to construct its StreamableHTTPSessionManager.
-"""
+def create_app() -> Starlette:
+    """Build the Streamable HTTP ASGI app off the upstream `mcp` instance.
 
-mcp.settings.transport_security = TransportSecuritySettings(enable_dns_rebinding_protection=False)
-"""FastMCP auto-enables DNS-rebinding protection with a loopback-only
-allowlist (127.0.0.1/localhost/::1) whenever `host` defaults to 127.0.0.1,
-which is what upstream's FastMCP(...) call does. Since we rebind to
-0.0.0.0 for container use, that allowlist would reject every request's
-Host header. Disable it explicitly.
-"""
+    Settings are applied before streamable_http_app(), which reads them
+    lazily on first call to construct its StreamableHTTPSessionManager.
 
-app = mcp.streamable_http_app()
+    Stateless: no Mcp-Session-Id to pin, so multiple workers/replicas can
+    sit behind a load balancer with no sticky sessions required.
+
+    FastMCP auto-enables DNS-rebinding protection with a loopback-only
+    allowlist (127.0.0.1/localhost/::1) whenever `host` defaults to
+    127.0.0.1, which is what upstream's FastMCP(...) call does. Since we
+    rebind to 0.0.0.0 for container use, that allowlist would reject every
+    request's Host header, so it is disabled explicitly.
+    """
+    mcp.settings.stateless_http = True
+    mcp.settings.transport_security = TransportSecuritySettings(
+        enable_dns_rebinding_protection=False
+    )
+    return mcp.streamable_http_app()
+
+
+app = create_app()
 """Module-level ASGI app -- referenced by uvicorn as an import string
 ("mcpserver.server_http:app") so each worker process re-imports it fresh
 instead of sharing one already-built app object across processes.
