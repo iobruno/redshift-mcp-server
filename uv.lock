@@ -503,6 +503,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "awslabs-redshift-mcp-server" },
     { name = "mcp", extra = ["cli"] },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -514,6 +515,7 @@ dev = [
 requires-dist = [
     { name = "awslabs-redshift-mcp-server", specifier = "==0.0.30" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.29,<2.0" },
+    { name = "uvicorn", specifier = ">=0.51,<1.0" },
 ]
 
 [package.metadata.requires-dev]

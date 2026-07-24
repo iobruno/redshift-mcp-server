@@ -8,6 +8,7 @@ requires-python = ">=3.12,<3.14"
 dependencies = [
     "awslabs-redshift-mcp-server==0.0.30",
     "mcp[cli]>=1.29,<2.0",
+    "uvicorn>=0.51,<1.0",  # invoked directly by the Dockerfile's CMD, not just a transitive dep of `mcp`
 ]
 
 [dependency-groups]

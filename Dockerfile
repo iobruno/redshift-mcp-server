@@ -21,8 +21,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
+COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 COPY --from=builder /app /app
 
 EXPOSE 8000
 
-CMD ["python", "-m", "mcpserver.server_http"]
+# Shell-form `CMD` (not exec-form) so $REDSHIFT_MCP_PORT/$REDSHIFT_MCP_WORKERS
+# expand at container start -- `exec` in front makes uvicorn replace the shell
+# as PID 1, so it still receives SIGTERM directly on `docker stop`/ECS task
+# stop instead of the shell swallowing it.
+CMD exec uvicorn mcpserver.server_http:app --host 0.0.0.0 --port "${REDSHIFT_MCP_PORT:-8000}" --workers "${REDSHIFT_MCP_WORKERS:-1}"
