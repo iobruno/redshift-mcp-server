@@ -1,9 +1,12 @@
 # Redshift MCP Server (HTTP)
 
 ![Python](https://img.shields.io/badge/Python-3.13_|_3.12-4B8BBE.svg?style=flat&logo=python&logoColor=FFD43B&labelColor=306998)
-[![uv](https://img.shields.io/badge/astral/uv-261230?style=flat&logo=uv&logoColor=DE5FE9&labelColor=261230)](https://docs.astral.sh/uv/getting-started/installation/)
-[![Docker](https://img.shields.io/badge/Docker-329DEE?style=flat&logo=docker&logoColor=white&labelColor=329DEE)](https://docs.docker.com/get-docker/)
 [![AWS Redshift](https://img.shields.io/badge/AWS-Redshift-232F3E?style=flat&logo=amazonredshift&logoColor=8C4FFF&labelColor=232F3E)](https://aws.amazon.com/redshift/)
+[![uv](https://img.shields.io/badge/astral/uv-261230?style=flat&logo=uv&logoColor=DE5FE9&labelColor=261230)](https://docs.astral.sh/uv/getting-started/installation/)
+[![Podman](https://img.shields.io/badge/Podman-7845FF?style=flat&logo=podman&logoColor=white&labelColor=7845FF)](https://podman-desktop.io/downloads/)
+[![Docker](https://img.shields.io/badge/Docker-329DEE?style=flat&logo=docker&logoColor=white&labelColor=329DEE)](https://docs.docker.com/get-docker/)
+
+![Redshift MCP Server](./assets/redshift-mcp-server.svg)
 
 A Dockerized, HTTP-accessible MCP server wrapping
 [`awslabs.redshift-mcp-server`](https://awslabs.github.io/mcp/servers/redshift-mcp-server), so
